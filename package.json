@@ -1,0 +1,10 @@
+{
+  "name": "bummy",
+  "version": "1.0.0",
+  "main": "bummy.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "Tsurematsu",
+  "license": "MIT",
+  "description": "This project is a Node.js script that allows you to run React components individually"
+}
