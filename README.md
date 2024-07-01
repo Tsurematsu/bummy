@@ -10,7 +10,7 @@ The script performs the following actions:
 
 ## Facility
 ```bash
-    npm install bummy
+    npm install -g bummy
 ```
     
 ## Use
