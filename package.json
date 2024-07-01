@@ -1,6 +1,9 @@
 {
   "name": "bummy",
-  "version": "1.0.1",
+  "version": "1.0.2",
+  "bin": {
+    "bummy": "./bummy.js"
+  },
   "main": "bummy.js",
   "scripts": {},
   "keywords": [],
