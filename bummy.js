@@ -63,12 +63,19 @@ async function main() {
           <${cleanName}/>
         </React.StrictMode>
       )`;
-    await fs.writeFile(path.join(rutaPlantilla, 'src', 'main.jsx'), mainJsxContent);
-    // Cambiar al directorio de la plantilla
+      await fs.writeFile(path.join(rutaPlantilla, 'src', 'main.jsx'), mainJsxContent);
+      // Cambiar al directorio de la plantilla
+    const packagePlantilla = await leerArchivoJSON(path.join(rutaPlantilla, 'package.json'));
+    
+    let ExistPackageOriginal = false;
+    const folderPackageOriginal = path.join(rutaRelativa, 'package.json');
+    try {await fs.access(folderPackageOriginal, fs.constants.F_OK); ExistPackageOriginal = true;} catch (err) {ExistPackageOriginal = false;}
+    if (ExistPackageOriginal) {
+      const packageOriginal = await leerArchivoJSON(folderPackageOriginal);
+      packagePlantilla.dependencies = {...packagePlantilla.dependencies, ...packageOriginal.dependencies};
+    }
+    guardarArchivoJSON(path.join(rutaPlantilla, 'package.json'), packagePlantilla);
     process.chdir(rutaPlantilla);
-    // Abrir navegador
-    const startCommand = process.platform === 'win32' ? 'start' : 'open';
-    execSync(`${startCommand} http://localhost:${puerto??5173}/`);
     // Instalar dependencias y ejecutar
     execSync('npm install', { stdio: 'inherit' });
     if (!puerto) {
@@ -78,5 +85,27 @@ async function main() {
     }
   } catch (error) {
     console.error('Error:', error);
+  }
+}
+
+
+async function leerArchivoJSON(nombreArchivo) {
+  try {
+    const datos = await fs.readFile(nombreArchivo, 'utf8');
+    return JSON.parse(datos);
+  } catch (error) {
+    console.error(`Error al leer el archivo ${nombreArchivo}:`, error);
+    throw error;
+  }
+}
+
+async function guardarArchivoJSON(nombreArchivo, objeto) {
+  try {
+    const datosAGuardar = JSON.stringify(objeto, null, 2);
+    await fs.writeFile(nombreArchivo, datosAGuardar, 'utf8');
+    console.log(`Archivo guardado exitosamente en ${nombreArchivo}`);
+  } catch (error) {
+    console.error(`Error al guardar el archivo ${nombreArchivo}:`, error);
+    throw error;
   }
 }
