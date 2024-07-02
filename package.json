@@ -1,6 +1,6 @@
 {
   "name": "bummy",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "bin": {
     "bummy": "./bummy.js"
   },
@@ -11,6 +11,8 @@
   "license": "MIT",
   "description": "This project is a Node.js script that allows you to run React components individually",
   "dependencies": {
-    "adm-zip": "^0.5.14"
-  }
+    "adm-zip": "^0.5.14",
+    "zingal": "^1.0.2"
+  },
+  "devDependencies": {}
 }

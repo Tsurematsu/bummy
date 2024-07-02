@@ -39,6 +39,18 @@ const verifyFolder = async () => {
   rutaPlantilla = path.join(documentosPath, 'bummy', 'template');
   main().catch(console.error);
 };
+
+async function processJson(){
+  const packageLocal = await leerArchivoJSON(path.join(__dirname, 'package.json'));
+  if (existeArchivo(path.join(process.cwd(), 'package.json'))){
+    const packageRelativo = await leerArchivoJSON(path.join(process.cwd(), 'package.json'));
+    packageLocal.dependencies = {...packageLocal.dependencies, ...packageRelativo.dependencies};
+    packageLocal.devDependencies = {...packageLocal.devDependencies, ...packageRelativo.devDependencies};
+    await guardarArchivoJSON(path.join(__dirname, 'package.json'), packageLocal);
+  }
+}
+
+
 verifyFolder();
 
 
@@ -64,17 +76,8 @@ async function main() {
         </React.StrictMode>
       )`;
       await fs.writeFile(path.join(rutaPlantilla, 'src', 'main.jsx'), mainJsxContent);
-      // Cambiar al directorio de la plantilla
-    const packagePlantilla = await leerArchivoJSON(path.join(rutaPlantilla, 'package.json'));
-    
-    let ExistPackageOriginal = false;
-    const folderPackageOriginal = path.join(rutaRelativa, 'package.json');
-    try {await fs.access(folderPackageOriginal, fs.constants.F_OK); ExistPackageOriginal = true;} catch (err) {ExistPackageOriginal = false;}
-    if (ExistPackageOriginal) {
-      const packageOriginal = await leerArchivoJSON(folderPackageOriginal);
-      packagePlantilla.dependencies = {...packagePlantilla.dependencies, ...packageOriginal.dependencies};
-    }
-    guardarArchivoJSON(path.join(rutaPlantilla, 'package.json'), packagePlantilla);
+    // Cambiar al directorio de la plantilla
+    await processJson();
     process.chdir(rutaPlantilla);
     // Instalar dependencias y ejecutar
     execSync('npm install', { stdio: 'inherit' });
@@ -107,5 +110,14 @@ async function guardarArchivoJSON(nombreArchivo, objeto) {
   } catch (error) {
     console.error(`Error al guardar el archivo ${nombreArchivo}:`, error);
     throw error;
+  }
+}
+
+async function existeArchivo(ruta) {
+  try {
+    await fs.access(ruta);
+    return true;
+  } catch (error) {
+    return false;
   }
 }
