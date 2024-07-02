@@ -9,5 +9,8 @@
   "keywords": [],
   "author": "Tsurematsu",
   "license": "MIT",
-  "description": "This project is a Node.js script that allows you to run React components individually"
+  "description": "This project is a Node.js script that allows you to run React components individually",
+  "dependencies": {
+    "adm-zip": "^0.5.14"
+  }
 }
