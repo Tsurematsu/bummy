@@ -41,8 +41,8 @@ const verifyFolder = async () => {
 };
 
 async function processJson(){
-  const packageLocal = await leerArchivoJSON(path.join(__dirname, 'package.json'));
   if (existeArchivo(path.join(process.cwd(), 'package.json'))){
+    const packageLocal = await leerArchivoJSON(path.join(__dirname, 'package.json'));
     const packageRelativo = await leerArchivoJSON(path.join(process.cwd(), 'package.json'));
     packageLocal.dependencies = {...packageLocal.dependencies, ...packageRelativo.dependencies};
     packageLocal.devDependencies = {...packageLocal.devDependencies, ...packageRelativo.devDependencies};
@@ -50,9 +50,7 @@ async function processJson(){
   }
 }
 
-
 verifyFolder();
-
 
 async function main() {
   const rutaRelativa = process.cwd();
